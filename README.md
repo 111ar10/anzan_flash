@@ -4,15 +4,39 @@ A mobile-first browser game for training **mental abacus (anzan)** — the Japan
 
 No install. No account. One HTML file.
 
+---
+
 ## Screenshots
 
-![Start screen](screenshots/start_screen.png)
-![Play tab](screenshots/main_page_en.png)
-![Challenge tab](screenshots/challenge_mode.png)
-![Stats tab](screenshots/stats_1.png)
-![Badges tab](screenshots/badges.png)
-![Config tab](screenshots/config.png)
-![Gameplay](screenshots/gameplay.png)
+<p align="center">
+  <img src="screenshots/start_screen.png" width="28%" alt="Start screen" />
+  &nbsp;&nbsp;
+  <img src="screenshots/main_page_en.png" width="28%" alt="Play tab" />
+  &nbsp;&nbsp;
+  <img src="screenshots/gameplay.png" width="28%" alt="Gameplay" />
+</p>
+<p align="center">
+  <sub>Start screen &nbsp;·&nbsp; Play tab &nbsp;·&nbsp; Gameplay</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/challenge_mode.png" width="28%" alt="Challenge mode" />
+  &nbsp;&nbsp;
+  <img src="screenshots/stats_1.png" width="28%" alt="Stats" />
+  &nbsp;&nbsp;
+  <img src="screenshots/badges.png" width="28%" alt="Badges" />
+</p>
+<p align="center">
+  <sub>Challenge mode &nbsp;·&nbsp; Stats &nbsp;·&nbsp; Badges</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/config.png" width="28%" alt="Config" />
+</p>
+<p align="center">
+  <sub>Config tab</sub>
+</p>
+
 ---
 
 ## What is Anzan?
@@ -292,5 +316,6 @@ python3 test_integration.py -k challenge   # filter by name
 
 ## License
 
-CC BY-NC-ND 4.0 — Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International.
-Free for personal and educational use. Commercial use or distribution of modified versions requires written permission from the author. See LICENSE for full terms.
+**CC BY-NC-ND 4.0** — Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International.
+
+Free for personal and educational use. Commercial use or distribution of modified versions requires written permission from the author. See [LICENSE](LICENSE) for full terms.
