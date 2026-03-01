@@ -4,6 +4,15 @@ A mobile-first browser game for training **mental abacus (anzan)** — the Japan
 
 No install. No account. One HTML file.
 
+## Screenshots
+
+![Start screen](screenshots/start_screen.png)
+![Play tab](screenshots/main_page_en.png)
+![Challenge tab](screenshots/challenge_mode.png)
+![Stats tab](screenshots/stats_1.png)
+![Badges tab](screenshots/badges.png)
+![Config tab](screenshots/config.png)
+![Gameplay](screenshots/gameplay.png)
 ---
 
 ## What is Anzan?
