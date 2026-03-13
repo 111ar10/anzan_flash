@@ -280,16 +280,16 @@ The export format is a base64-encoded, XOR-obfuscated JSON blob with a checksum.
 ## Testing
 
 ```bash
-# Unit tests — 69 tests, pure logic, no browser needed
+# Unit tests — 110 tests, pure logic, no browser needed
 node test_unit.js
 node test_unit.js --verbose
 
-# Integration tests — 21 tests, real Chromium via Playwright
+# Integration tests — 28 tests, real Chromium via Playwright
 pip install playwright
 playwright install chromium
-python3 test_integration.py
-python3 test_integration.py -v
-python3 test_integration.py -k challenge   # filter by name
+python test_integration.py
+python test_integration.py -v
+python test_integration.py -k challenge   # filter by name
 ```
 
 ---
