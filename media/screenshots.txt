@@ -1,0 +1,7 @@
+Setup on your machine (one-time):
+
+pip install playwright pillow
+playwright install chromium (or in PowerShell: python -m playwright install chromium)
+
+Run:
+python3 generate_media.py anzan_flash.html

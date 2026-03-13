@@ -161,6 +161,11 @@
         .cpc-custom{background:var(--bg3);color:var(--txt3);border-color:transparent}
         .cp-row-hdr{display:flex;justify-content:space-between;align-items:center}
         .cv-maxNum-live{font-size:13px;font-weight:800;color:var(--pri)}
+        /* Language picker in name modal */
+        .lang-pick-row{display:flex;gap:10px;justify-content:center;margin-bottom:14px}
+        .lang-pick-btn{flex:1;max-width:150px;padding:10px 0;border-radius:14px;border:2px solid var(--bg3);background:var(--bg3);color:var(--txt2);font-size:15px;font-weight:700;cursor:pointer;transition:all .15s}
+        .lang-pick-btn.on{border-color:var(--pri);background:var(--pri);color:#fff}
+
         /* Difficulty picker */
         .diff-row{flex-direction:column;align-items:flex-start;gap:8px}
         .diffbs{display:flex;gap:6px;flex-wrap:wrap}
@@ -689,7 +694,12 @@
 <div class="mo" id="mLvl"><div class="md"><div class="mdi">🎉</div><div class="mdt" id="mLvlHead" data-i="levelUp">Nova Razina!</div><div class="mdtx" id="mLvlT">Level 2</div><div class="lvl-rank-badge" id="mLvlRankBadge"></div><div class="mdr" id="mLvlR">+50 ⭐</div><button class="btn bp bw" onclick="closeM('mLvl')">OK 🎉</button></div></div>
 <div class="mo" id="mBdg"><div class="md" style="max-width:340px"><div class="mdi" id="mBdgI">🏆</div><div class="mdt" id="mBdgT">Badge!</div><div class="mbdg-list" id="mBdgList"></div><div class="mdr" id="mBdgR">+50 ⭐</div><button class="btn bp bw" onclick="closeM('mBdg')">OK 🎉</button></div></div>
 <div class="mo" id="mTut"><div class="md" id="tutContent"></div></div>
-<div class="mo" id="mName"><div class="name-entry"><div style="font-size:48px;margin-bottom:8px">🧮</div><h2>Anzan Flash</h2><p id="namePromptTxt"></p><input type="text" class="name-input" id="nameInput" placeholder="Tvoje ime..." maxlength="20" oninput="prevName(this.value)"><div class="avatar-pick" id="avatarPick"></div><button class="btn bp bw" style="height:52px;font-size:17px" onclick="submitName()">▶️ <span id="nameStartBtn">Kreni!</span></button></div></div>
+<div class="mo" id="mName"><div class="name-entry"><div style="font-size:48px;margin-bottom:8px">🧮</div><h2>Anzan Flash</h2>
+    <div class="lang-pick-row" id="langPickRow">
+        <button class="lang-pick-btn on" id="lpEn" onclick="pickLang('en')">🇬🇧 English</button>
+        <button class="lang-pick-btn" id="lpHr" onclick="pickLang('hr')">🇭🇷 Hrvatski</button>
+    </div>
+    <p id="namePromptTxt"></p><input type="text" class="name-input" id="nameInput" placeholder="Tvoje ime..." maxlength="20" oninput="prevName(this.value)"><div class="avatar-pick" id="avatarPick"></div><button class="btn bp bw" style="height:52px;font-size:17px" onclick="submitName()">▶️ <span id="nameStartBtn">Kreni!</span></button></div></div>
 <div class="celeb" id="celeb"></div>
 <div id="toasts"></div>
 
@@ -708,7 +718,7 @@ const TR={
 function t(k){return(TR[lang]&&TR[lang][k])||k}
 
 const ANZAN_TYPES=[{id:'direct_plus',hr:'Direktno +',en:'Direct +'},{id:'direct_minus',hr:'Direktno ±',en:'Direct ±'},{id:'bro_sis_plus',hr:'Braća +',en:'Brothers +'},{id:'bro_sis_minus',hr:'Braća −',en:'Brothers −'},{id:'rel_plus',hr:'Srodnici +',en:'Relatives +'},{id:'rel_minus',hr:'Srodnici −',en:'Relatives −'},{id:'neigh_plus',hr:'Susjedi +',en:'Neighbors +'},{id:'neigh_minus',hr:'Susjedi −',en:'Neighbors −'},{id:'addition',hr:'Zbrajanje',en:'Addition'},{id:'subtraction',hr:'Oduzimanje',en:'Subtraction'},{id:'multiplication',hr:'Množenje',en:'Multiplication'},{id:'division',hr:'Dijeljenje',en:'Division'},{id:'mixed',hr:'Miješano',en:'Mixed'},{id:'speed_plus',hr:'Brzinsko +',en:'Speed +'},{id:'master',hr:'Majstorski',en:'Master'}];
-const RANKS=[{minLvl:1,maxLvl:2,icon:'🐣',hr:'Početnik',en:'Beginner'},{minLvl:3,maxLvl:4,icon:'🌱',hr:'Učenik',en:'Learner'},{minLvl:5,maxLvl:7,icon:'📖',hr:'Pripravnik',en:'Apprentice'},{minLvl:8,maxLvl:10,icon:'✏️',hr:'Student',en:'Student'},{minLvl:11,maxLvl:14,icon:'🔢',hr:'Brojač',en:'Counter'},{minLvl:15,maxLvl:19,icon:'💡',hr:'Mislioc',en:'Thinker'},{minLvl:20,maxLvl:24,icon:'⚡',hr:'Munja',en:'Speedster'},{minLvl:25,maxLvl:29,icon:'🎯',hr:'Precizni',en:'Perfekcionist'},{minLvl:30,maxLvl:34,icon:'🏅',hr:'Natjecatelj',en:'Competitor'},{minLvl:35,maxLvl:39,icon:'🔥',hr:'Vatreni Um',en:'Hot Mind'},{minLvl:40,maxLvl:44,icon:'🧠',hr:'Pametan',en:'Sharp'},{minLvl:45,maxLvl:49,icon:'🚀',hr:'Astronaut',en:'Rocketeer'},{minLvl:50,maxLvl:59,icon:'💎',hr:'Dijamant',en:'Diamond'},{minLvl:60,maxLvl:69,icon:'🏆',hr:'Prvak',en:'Champion'},{minLvl:70,maxLvl:79,icon:'👑',hr:'Majstor',en:'Master'},{minLvl:80,maxLvl:89,icon:'🌟',hr:'Velikan',en:'Grand Master'},{minLvl:90,maxLvl:99,icon:'🌌',hr:'Legenda',en:'Legend'},{minLvl:100,maxLvl:999,icon:'🧙',hr:'Anzan Mudrac',en:'Anzan Sage'}];
+const RANKS=[{minLvl:1,maxLvl:2,icon:'🐣',hr:'Početnik',en:'Beginner'},{minLvl:3,maxLvl:4,icon:'🌱',hr:'Učenik',en:'Learner'},{minLvl:5,maxLvl:7,icon:'📖',hr:'Vježbenik',en:'Apprentice'},{minLvl:8,maxLvl:10,icon:'✏️',hr:'Student',en:'Student'},{minLvl:11,maxLvl:14,icon:'🔢',hr:'Računač',en:'Counter'},{minLvl:15,maxLvl:19,icon:'💡',hr:'Mislilac',en:'Thinker'},{minLvl:20,maxLvl:24,icon:'⚡',hr:'Brzinac',en:'Speedster'},{minLvl:25,maxLvl:29,icon:'🎯',hr:'Precizni',en:'Precise'},{minLvl:30,maxLvl:34,icon:'🏅',hr:'Natjecatelj',en:'Competitor'},{minLvl:35,maxLvl:39,icon:'🔥',hr:'Goruće Uma',en:'Hot Mind'},{minLvl:40,maxLvl:44,icon:'🧠',hr:'Pametan',en:'Sharp'},{minLvl:45,maxLvl:49,icon:'🚀',hr:'Raketar',en:'Rocketeer'},{minLvl:50,maxLvl:59,icon:'💎',hr:'Dijamant',en:'Diamond'},{minLvl:60,maxLvl:69,icon:'🏆',hr:'Prvak',en:'Champion'},{minLvl:70,maxLvl:79,icon:'👑',hr:'Majstor',en:'Master'},{minLvl:80,maxLvl:89,icon:'🌟',hr:'Velikan',en:'Grand Master'},{minLvl:90,maxLvl:99,icon:'🌌',hr:'Legenda',en:'Legend'},{minLvl:100,maxLvl:999,icon:'🧙',hr:'Anzan Mudrac',en:'Anzan Sage'}];
 function getRank(l){return RANKS.find(r=>l>=r.minLvl&&l<=r.maxLvl)||RANKS[0]}
 function getRankTitle(l){const r=getRank(l);return`${r.icon} ${lang==='hr'?r.hr:r.en}`}
 function isRankUp(o,n){return getRank(o)!==getRank(n)}
@@ -716,6 +726,18 @@ const TIPS={hr:['Vizualiziraj abakus u glavi!','Vježbaj svaki dan — čak i 5 
 function renderTip(){const i=Math.floor(Date.now()/86400000)%TIPS.hr.length;const lbl=document.getElementById('tipLabel');if(lbl)lbl.textContent=lang==='hr'?'Savjet':'Tip';const txt=document.getElementById('tipText');if(txt)txt.textContent=TIPS[lang][i]}
 function renderRankCard(){const r=getRank(D.level),nx=RANKS.find(rr=>rr.minLvl>D.level);document.getElementById('rankIcon').textContent=r.icon;document.getElementById('rankTitleTxt').textContent=lang==='hr'?r.hr:r.en;document.getElementById('rankSubTxt').textContent=`Lv. ${D.level}`;document.getElementById('rankNextTxt').textContent=nx?`${nx.icon} ${nx.minLvl-D.level}`:'🏆 Max!'}
 function updLang(){document.querySelectorAll('[data-i]').forEach(e=>{const k=e.dataset.i;if(TR[lang][k])e.textContent=TR[lang][k]});document.getElementById('lb').textContent=lang==='hr'?'EN':'HR';document.getElementById('langSet').textContent=lang.toUpperCase();if(typeof setDifficulty==='function')setDifficulty(D.difficulty||'normal');}
+function pickLang(l){
+    lang=l;
+    localStorage.setItem('az_lang',l);
+    document.getElementById('lpEn').classList.toggle('on',l==='en');
+    document.getElementById('lpHr').classList.toggle('on',l==='hr');
+    updLang();
+    // Refresh modal text with new language
+    const isEdit=D.nameSet;
+    document.getElementById('namePromptTxt').textContent=isEdit?(l==='hr'?'Promijeni ime i avatar':'Change name & avatar'):(l==='hr'?'Upiši svoje ime!':'Enter your name!');
+    document.getElementById('nameStartBtn').textContent=isEdit?(l==='hr'?'Spremi':'Save'):(l==='hr'?'Kreni!':'Go!');
+    document.getElementById('nameInput').placeholder=l==='hr'?'Tvoje ime...':'Your name...';
+}
 function toggleLang(){lang=lang==='hr'?'en':'hr';localStorage.setItem('az_lang',lang);updLang();updUI();updDaily();renderTip();renderRankCard();renderWorlds();renderLevels()}
 
 function genLevels(){const L=[],WD=[{icon:'🌱',type:'direct_plus',cfgs:l=>[2+Math.floor(l/4),1800-l*50,10,1,5,8]},{icon:'🌿',type:'direct_minus',cfgs:l=>[3+Math.floor(l/3),1600-l*40,20,1,9,10]},{icon:'📚',type:'bro_sis_plus',cfgs:l=>[3+Math.floor(l/3),1500-l*35,30,1,9,10]},{icon:'📖',type:'bro_sis_minus',cfgs:l=>[4+Math.floor(l/4),1400-l*30,40,1,9,10]},{icon:'💪',type:'rel_plus',cfgs:l=>[4+Math.floor(l/4),1300-l*25,60,1,9,10]},{icon:'🔑',type:'rel_minus',cfgs:l=>[5+Math.floor(l/4),1200-l*25,80,1,9,10]},{icon:'🏘️',type:'neigh_plus',cfgs:l=>[5+Math.floor(l/5),1100-l*20,100,5,20,10]},{icon:'🔢',type:'neigh_minus',cfgs:l=>[5+Math.floor(l/4),1000-l*20,150,5,30,10]},{icon:'➕',type:'addition',cfgs:l=>[4+Math.floor(l/4),1000-l*15,300,10,50,10]},{icon:'➖',type:'subtraction',cfgs:l=>[4+Math.floor(l/4),950-l*15,500,10,70,10]},{icon:'✖️',type:'multiplication',cfgs:l=>[2+Math.floor(l/4),1200-l*20,200,2,12,10]},{icon:'➗',type:'division',cfgs:l=>[2+Math.floor(l/4),1300-l*25,100,2,12,10]},{icon:'⭐',type:'mixed',cfgs:l=>[5+Math.floor(l/4),900-l*15,500,5,50,12]},{icon:'⚡',type:'speed_plus',cfgs:l=>[6+Math.floor(l/3),700-l*12,1000,10,100,12]},{icon:'👑',type:'master',cfgs:l=>[8+Math.floor(l/3),600-l*10,2000,20,200,15]}],MP=[[],['direct_plus'],['direct_plus','direct_minus'],['direct_plus','direct_minus','bro_sis_plus'],['direct_plus','direct_minus','bro_sis_plus','bro_sis_minus'],['direct_plus','direct_minus','bro_sis_plus','bro_sis_minus','rel_plus'],['direct_minus','bro_sis_plus','bro_sis_minus','rel_plus','rel_minus'],['direct_minus','bro_sis_plus','rel_plus','rel_minus','neigh_plus'],['direct_minus','rel_plus','rel_minus','neigh_plus','neigh_minus'],['direct_minus','rel_minus','neigh_plus','neigh_minus','addition'],['addition','subtraction'],['addition','subtraction','multiplication'],['direct_minus','addition','subtraction','multiplication','division'],['addition','subtraction','multiplication','division','mixed'],['addition','subtraction','multiplication','division','mixed','speed_plus']];for(let w=0;w<WD.length;w++){const wd=WD[w],pool=MP[w];for(let l=1;l<=10;l++){const c=wd.cfgs(l),mw=l<=4?0:Math.min(.7,(l-4)*.12),et=pool.length>0&&mw>0?`mix:${wd.type}:${mw}:${pool.join(',')}`:'';L.push({level:w*10+l,world:w+1,icon:wd.icon,anzanType:wd.type,effectiveType:et,numbers:c[0],speed:Math.max(c[1],280),maxResult:c[2],minNum:c[3],maxNum:c[4],rounds:c[5]||10,mixWeight:mw,poolTypes:pool})}}return L}
@@ -788,7 +810,7 @@ function setDifficulty(key){
 
 let D={name:'Player',avatar:'🧒',level:1,xp:0,stars:0,dailyStreak:0,lastPlay:null,nameSet:false,totalRounds:0,correctAnswers:0,bestStreak:0,levelsCompleted:0,perfectLevels:0,levelProgress:{},badges:[],badgeCounts:{},history:[],totalTime:0,roundTimes:[],dailyGames:{},daily:{date:null,goal:3,progress:0,done:false},tutorialDone:false,adaptiveLevel:{numbers:5,speed:1000,maxResult:50,minNum:1,maxNum:9},challengeRuns:0,challengePBs:{},difficulty:'normal'};
 let G={level:null,round:0,results:[],correct:0,streak:0,maxStreak:0,combo:0,maxCombo:0,nums:[],dispNums:[],isNeg:[],answer:0,opType:'add',hintUsed:false,waiting:false,finishing:false,startTime:0,roundStart:0,roundTimes:[],isPractice:false,isAdaptive:false,isChallenge:false,challPending:false,levelComplete:false};
-let curWorld=1,selectedLevel=null,chart=null,audioCtx=null,vol=.7,lang='hr',soundTheme='classic';
+let curWorld=1,selectedLevel=null,chart=null,audioCtx=null,vol=.7,lang='en',soundTheme='classic';
 const SOUND_THEMES={
     classic:{osc:'sine',   baseFreq:1,  gain:.2, atk:.01, rel:.12, chord:'sine'},
     piano:  {osc:'triangle',baseFreq:1.2,gain:.18,atk:.005,rel:.18,chord:'triangle'},
@@ -810,7 +832,7 @@ const _diffMigrate={easy:'beginner',hard:'competition',expert:'elite'};
 if(_diffMigrate[D.difficulty])D.difficulty=_diffMigrate[D.difficulty];
 if(!DIFFICULTIES[D.difficulty])D.difficulty='normal';}
 function saveD(){localStorage.setItem('az2',JSON.stringify(D))}
-function loadS(){lang=localStorage.getItem('az_lang')||'hr';setTheme(localStorage.getItem('az_t')||'default');vol=parseFloat(localStorage.getItem('az_v')||'.7');document.getElementById('vol').value=vol*100}
+function loadS(){lang=localStorage.getItem('az_lang')||'en';setTheme(localStorage.getItem('az_t')||'default');vol=parseFloat(localStorage.getItem('az_v')||'.7');document.getElementById('vol').value=vol*100}
 
 function showTutorial(){const steps=[{icon:'🧮',text:{hr:'Dobrodošli! Brojevi se brzo prikazuju.',en:'Welcome! Numbers flash quickly.'}},{icon:'🧠',text:{hr:'Zbrajaj u glavi. Minus (−) se oduzima.',en:'Add in your head. Minus (−) subtracts.'}},{icon:'✏️',text:{hr:'Upiši rezultat! Enter ili ✓.',en:'Type the answer! Enter or ✓.'}},{icon:'⭐',text:{hr:'🥉60% 🥈80% 🥇100% 💎100%+brzo',en:'🥉60% 🥈80% 🥇100% 💎100%+fast'}}];let step=0;function render(){const s=steps[step];document.getElementById('tutContent').innerHTML=`<div class="tut-step"><div class="tut-anim">${s.icon}</div><div class="tut-text">${s.text[lang].replace(/\n/g,'<br>')}</div><div class="tut-dots">${steps.map((_,i)=>`<div class="tut-dot ${i===step?'on':''}"></div>`).join('')}</div><div style="display:flex;gap:8px;justify-content:center">${step>0?'<button class="btn bs" onclick="tutPrev()">←</button>':''}${step<steps.length-1?'<button class="btn bp" onclick="tutNext()">→</button>':`<button class="btn bp" onclick="tutDone()">${t('start')}!</button>`}</div>${step===0?`<button class="btn bs" onclick="tutDone()" style="margin-top:8px;opacity:.6">${t('skip')}</button>`:''}</div>`}window.tutNext=()=>{step++;render()};window.tutPrev=()=>{step--;render()};window.tutDone=()=>{D.tutorialDone=true;saveD();closeM('mTut');renderTip()};render();document.getElementById('mTut').classList.add('vis')}
 
@@ -1272,7 +1294,23 @@ function checkBadges(ctx={}){const nb=[];BADGES.forEach(b=>{if(b.rep){let e=fals
 function showBadgesM(badges){if(!badges?.length)return;const totalXP=badges.reduce((s,b)=>s+b.xp,0),single=badges.length===1,b=badges[0];document.getElementById('mBdgI').textContent=single?b.n:'🏆';document.getElementById('mBdgT').textContent=single?(b.rep&&(D.badgeCounts[b.id]||1)>1?`${b.n} x${D.badgeCounts[b.id]}`:b.d[lang]):(()=>{const n=badges.length;if(lang==='hr'){const w=n===1?'trofej':'trofeja';return `${n} ${w}`}else{return `${n} ${t('badges_earned')}`}})();document.getElementById('mBdgR').textContent=`+${totalXP} ⭐`;document.getElementById('mBdgList').innerHTML=badges.map(b=>`<div class="mbdg-item"><div class="mbdg-icon">${b.n}</div><div class="mbdg-info"><div class="mbdg-name">${b.rep&&(D.badgeCounts[b.id]||1)>1?`${b.d[lang]} x${D.badgeCounts[b.id]}`:b.d[lang]}</div></div><div class="mbdg-xp">+${b.xp} ⭐</div></div>`).join('');document.getElementById('mBdg').classList.add('vis');celebrate()}
 
 const AVATARS=['🧒','👦','👧','🦸','🧙','🥷','👸','🤴','🦊','🐱','🐶','🦁','🐼','🦄','🤖','👽'];let pendingAvatar='🧒';
-function showNameEntry(){pendingAvatar=D.avatar||'🧒';document.getElementById('nameInput').value=(D.name&&D.name!=='Player')?D.name:'';document.getElementById('avatarPick').innerHTML=AVATARS.map(a=>`<span class="ava-opt ${a===pendingAvatar?'sel':''}" onclick="pickAva('${a}')">${a}</span>`).join('');document.getElementById('namePromptTxt').textContent=D.nameSet?(lang==='hr'?'Promijeni ime i avatar':'Change name & avatar'):(lang==='hr'?'Upiši svoje ime!':'Enter your name!');document.getElementById('nameStartBtn').textContent=D.nameSet?(lang==='hr'?'Spremi':'Save'):(lang==='hr'?'Kreni!':'Go!');document.getElementById('mName').classList.add('vis')}
+function showNameEntry(){
+    pendingAvatar=D.avatar||'🧒';
+    document.getElementById('nameInput').value=(D.name&&D.name!=='Player')?D.name:'';
+    document.getElementById('avatarPick').innerHTML=AVATARS.map(a=>`<span class="ava-opt ${a===pendingAvatar?'sel':''}" onclick="pickAva('${a}')">${a}</span>`).join('');
+    document.getElementById('namePromptTxt').textContent=D.nameSet?(lang==='hr'?'Promijeni ime i avatar':'Change name & avatar'):(lang==='hr'?'Upiši svoje ime!':'Enter your name!');
+    document.getElementById('nameStartBtn').textContent=D.nameSet?(lang==='hr'?'Spremi':'Save'):(lang==='hr'?'Kreni!':'Go!');
+    document.getElementById('nameInput').placeholder=lang==='hr'?'Tvoje ime...':'Your name...';
+    // Show lang picker only on first run; hide when editing existing profile
+    const lpr=document.getElementById('langPickRow');
+    if(lpr)lpr.style.display=D.nameSet?'none':'flex';
+    // Sync lang picker buttons to current lang
+    const lpEn=document.getElementById('lpEn');
+    const lpHr=document.getElementById('lpHr');
+    if(lpEn)lpEn.classList.toggle('on',lang==='en');
+    if(lpHr)lpHr.classList.toggle('on',lang==='hr');
+    document.getElementById('mName').classList.add('vis');
+}
 function pickAva(a){pendingAvatar=a;document.querySelectorAll('.ava-opt').forEach(el=>el.classList.toggle('sel',el.textContent===a))}
 function prevName(v){document.getElementById('pn').textContent=v.trim()||D.name}
 function submitName(){D.name=document.getElementById('nameInput').value.trim()||'';D.avatar=pendingAvatar;D.nameSet=true;saveD();updUI();renderTip();closeM('mName');if(!D.tutorialDone)setTimeout(showTutorial,200)}

@@ -1,41 +1,40 @@
 # 🧮 Anzan Flash
 
-A mobile-first browser game for training **mental abacus (anzan)** — the Japanese technique of visualising a soroban in your mind to perform rapid mental arithmetic.
+A mobile-first browser game for training mental abacus (anzan) — the Japanese technique of visualising a soroban in your mind to perform rapid mental arithmetic.
 
-No install. No account. One HTML file.
+**No install. No account. One HTML file.**
 
 ---
 
-## Screenshots
+## Screenshots & Demo
 
-<p align="center">
-  <img src="screenshots/start_screen.png" width="28%" alt="Start screen" />
-  &nbsp;&nbsp;
-  <img src="screenshots/main_page_en.png" width="28%" alt="Play tab" />
-  &nbsp;&nbsp;
-  <img src="screenshots/gameplay.png" width="28%" alt="Gameplay" />
-</p>
-<p align="center">
-  <sub>Start screen &nbsp;·&nbsp; Play tab &nbsp;·&nbsp; Gameplay</sub>
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="screenshots/challenge_mode.png" width="28%" alt="Challenge mode" />
-  &nbsp;&nbsp;
-  <img src="screenshots/stats_1.png" width="28%" alt="Stats" />
-  &nbsp;&nbsp;
-  <img src="screenshots/badges.png" width="28%" alt="Badges" />
-</p>
-<p align="center">
-  <sub>Challenge mode &nbsp;·&nbsp; Stats &nbsp;·&nbsp; Badges</sub>
-</p>
+<img src="media/gifs/gameplay_round.gif" width="32%" alt="Gameplay round">
+<img src="media/gifs/number_flash.gif" width="32%" alt="Number flashing">
+<img src="media/gifs/themes.gif" width="32%" alt="Visual themes">
 
-<p align="center">
-  <img src="screenshots/config.png" width="28%" alt="Config" />
-</p>
-<p align="center">
-  <sub>Config tab</sub>
-</p>
+*Full round · Number flash close-up · All 7 themes*
+
+<br>
+
+<img src="media/screenshots/01_home.png" width="22%" alt="Home screen">
+<img src="media/screenshots/04_level_sheet.png" width="22%" alt="Level detail">
+<img src="media/screenshots/05_stats.png" width="22%" alt="Stats">
+<img src="media/screenshots/06_badges.png" width="22%" alt="Badges">
+
+*Home · Level detail · Stats · Badges*
+
+<br>
+
+<img src="media/screenshots/08_countdown.png" width="22%" alt="Countdown">
+<img src="media/screenshots/09_flashing.png" width="22%" alt="Flashing">
+<img src="media/screenshots/10_answer_prompt.png" width="22%" alt="Answer input">
+<img src="media/screenshots/11_result.png" width="22%" alt="Result">
+
+*Countdown · Flash · Answer · Result*
+
+</div>
 
 ---
 
@@ -57,26 +56,46 @@ This app trains the core skill: recognising numbers shown rapidly in sequence an
 - **52 trophies** across 8 categories
 - **18 player ranks** from 🐣 Beginner to 🧙 Anzan Sage
 - **Mastery system** — Bronze / Silver / Gold / Diamond per level
-- **5 sound themes** and 7 visual themes
-- **Full Croatian / English** localisation
+- **5 sound themes** and **7 visual themes**
+- **Full Croatian / English localisation**
 - **Export / Import** — portable save format with checksum validation
 - No ads, no server, no dependencies beyond an optional Chart.js CDN for the stats graph
 
 ---
 
+## Usage
+
+1. Open `anzan_flash.html` in any modern browser — no server needed
+2. Enter your name and choose an avatar
+3. Complete the short tutorial
+4. Set your preferred difficulty in the Config tab before starting
+5. Work through the levels in order, or jump straight into Challenge mode
+
+**Keyboard shortcuts**
+
+| Key | Action |
+|-----|--------|
+| `0`–`9` | Enter digit |
+| `-` | Toggle negative sign |
+| `Backspace` | Delete last digit |
+| `Enter` | Submit answer / Continue |
+| `Escape` | Exit game |
+
+---
+
 ## Difficulty Tiers
 
-Set in the **Config** tab. Applies to all 150 levels. Challenge mode and Adaptive mode use their own settings.
+Set in the Config tab. Applies to all 150 levels. Challenge mode and Adaptive mode use their own settings.
 
 | Tier | Based on | Speed | Numbers | Max value | XP |
-|------|----------|-------|---------|-----------|-----|
+|------|----------|-------|---------|-----------|----|
 | 🌱 Beginner | Absolute newcomer | ×1.6 slower | −2 | ×0.5 | ×0.6 |
 | 📚 Student | Active learner | ×1.2 slower | −1 | ×0.8 | ×0.8 |
 | ⭐ Normal | Balanced default | ×1.0 | ±0 | ×1.0 | ×1.0 |
 | 🏆 Competition | All-Japan Championship | ×0.55 faster | +2 | ×1.8 | ×1.5 |
 | 👑 Elite | Guinness World Record territory | ×0.25 faster | +4 | ×3.0 | ×2.5 |
 
-**Example — World 1, Level 1** (base: 2 numbers, 1750 ms each, max value 5):
+**Example** — World 1, Level 1 (base: 2 numbers, 1750 ms, max value 5):
 
 | Tier | Numbers | Speed | Max |
 |------|---------|-------|-----|
@@ -86,7 +105,14 @@ Set in the **Config** tab. Applies to all 150 levels. Challenge mode and Adaptiv
 | 🏆 Competition | 4 | 963 ms | 9 |
 | 👑 Elite | 6 | 438 ms | 15 |
 
-At World 15 Level 10 on Elite: 15 numbers at ~125 ms each — comparable to the Guinness World Record of 15 three-digit numbers in 1.61 seconds.
+> At World 15 Level 10 on Elite: 15 numbers at ~125 ms each — comparable to the Guinness World Record of 15 three-digit numbers in 1.61 seconds.
+
+**Tips for progression**
+
+- **Beginner / Student** — focus on accuracy over speed; difficulty increases naturally as you level up
+- **Normal** — the intended experience for someone learning actively
+- **Competition** — suitable once you can reliably clear World 5–6 on Normal
+- **Elite** — for experienced practitioners who want to benchmark against world-record standards
 
 ---
 
@@ -169,9 +195,7 @@ Configure and run custom sessions:
 | Max number | 1–99999 | Auto |
 | Operations | add / sub / mult / div | add |
 
-**Auto-max**: changing the digit count automatically suggests a sensible max value (2–3 digits → 9, 4–5 → 50, 6–8 → 99, 9+ → 200). Can be overridden manually with the ✏️ button.
-
-Personal bests are tracked per unique config (rounds × numbers × speed × maxNum × operations).
+Auto-max: changing the digit count automatically suggests a sensible max value (2–3 digits → 9, 4–5 → 50, 6–8 → 99, 9+ → 200). Can be overridden manually. Personal bests are tracked per unique config (rounds × numbers × speed × maxNum × operations).
 
 ---
 
@@ -191,9 +215,7 @@ Tracked across all sessions:
 - Levels completed, perfect levels (100% accuracy)
 - Trophy counts, XP, player rank
 
----
-
-## Daily Challenge
+### Daily Challenge
 
 A fresh goal appears each day. Goal size: `3 + floor(playerLevel / 10)` rounds. Completing the daily goal counts toward your streak.
 
@@ -249,40 +271,9 @@ All data is stored locally in the browser. Nothing is sent to any server.
 | `az_v` | Volume |
 | `az_st` | Sound theme |
 
----
+### Export / Import
 
-## Export / Import
-
-The export format is a base64-encoded, XOR-obfuscated JSON blob with a checksum. Import validates the checksum before applying. Use the Export / Import buttons in the Config tab to back up or transfer saves between devices.
-
----
-
-## Keyboard Shortcuts
-
-| Key | Action |
-|-----|--------|
-| `0`–`9` | Enter digit |
-| `-` | Toggle negative sign |
-| `Backspace` | Delete last digit |
-| `Enter` | Submit answer / Continue |
-| `Escape` | Exit game |
-
----
-
-## Usage
-
-1. Open `anzan_flash.html` in any modern browser — no server needed
-2. Enter your name and choose an avatar
-3. Complete the short tutorial
-4. Set your preferred **difficulty** in the Config tab before starting
-5. Work through the levels in order, or jump straight into Challenge mode
-
-### Tips for progression
-
-- **Beginner / Student** — focus on accuracy over speed; the game increases difficulty naturally as you level up
-- **Normal** — the intended experience for someone learning actively
-- **Competition** — suitable once you can reliably clear World 5–6 on Normal
-- **Elite** — for experienced practitioners who want to benchmark against world-record standards
+The export format is a base64-encoded, XOR-obfuscated JSON blob with a checksum. Import validates the checksum before applying. Use the **Export / Import** buttons in the Config tab to back up or transfer saves between devices.
 
 ---
 
@@ -303,6 +294,20 @@ python3 test_integration.py -k challenge   # filter by name
 
 ---
 
+## Generating Media
+
+Repo screenshots and GIFs are generated automatically from the live game using Playwright:
+
+```bash
+pip install playwright pillow
+python -m playwright install chromium
+python generate_media.py anzan_flash.html
+```
+
+Output goes to `media/screenshots/` and `media/gifs/`.
+
+---
+
 ## Technical Notes
 
 - Single self-contained HTML file — ~134 KB, ~1363 lines
@@ -316,6 +321,6 @@ python3 test_integration.py -k challenge   # filter by name
 
 ## License
 
-**CC BY-NC-ND 4.0** — Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International.
+[CC BY-NC-ND 4.0](LICENSE) — Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International.
 
-Free for personal and educational use. Commercial use or distribution of modified versions requires written permission from the author. See [LICENSE](LICENSE) for full terms.
+Free for personal and educational use. Commercial use or distribution of modified versions requires written permission from the author.
