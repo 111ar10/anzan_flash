@@ -169,7 +169,7 @@
         /* Difficulty picker */
         .diff-row{flex-direction:column;align-items:flex-start;gap:8px}
         .diffbs{display:flex;gap:6px;flex-wrap:wrap}
-        .diffb{padding:6px 12px;border-radius:12px;border:2px solid var(--bg3);background:var(--bg3);color:var(--txt2);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+        .diffb{padding:6px 12px;border-radius:12px;border:2px solid var(--bg3);background:var(--bg3);color:var(--txt2);font-size:13px;font-weight:700;cursor:pointer;transition:all .15px}
         .diffb.on{border-color:var(--pri);background:var(--pri);color:#fff}
         .diffb[data-diff="beginner"].on{background:#43a047;border-color:#43a047}
         .diffb[data-diff="student"].on{background:#1976d2;border-color:#1976d2}
@@ -321,8 +321,8 @@
         .nd.fl{animation:nf .18s ease-out}.nd.neg{color:var(--err)}
         @keyframes nf{0%{transform:scale(.5);opacity:0}55%{transform:scale(1.07)}100%{transform:scale(1);opacity:1}}
         .nc{font-size:13px;color:var(--txt3);margin-top:8px;font-weight:600}
-        .cd{font-size:clamp(70px,20vw,108px);font-weight:900;color:var(--pri);animation:pu .45s ease}
-        @keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+        /* COUNTDOWN: visually distinct from game numbers — smaller, italic, muted */
+        .cd{font-size:clamp(56px,15vw,84px);font-weight:700;color:var(--txt3);animation:pu .45s ease;font-style:italic;letter-spacing:2px;opacity:.6}
         .combo{position:absolute;top:8px;right:12px;background:linear-gradient(135deg,#ef4444,#f97316);color:#fff;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:800;display:none;animation:ci .22s ease-out}
         .combo.vis{display:block}
         @keyframes ci{from{transform:scale(.35);opacity:0}to{transform:scale(1);opacity:1}}
@@ -382,6 +382,7 @@
         @keyframes ti{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
         @keyframes to{to{opacity:0}}
         .in-game .hdr,.in-game .xpc,.in-game .tabs{display:none!important}
+        @keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
     </style>
 </head>
 <body>
@@ -567,6 +568,7 @@
                         <button class="sndb" data-snd="off" onclick="setSoundTheme('off')" title="Off">🔇</button>
                     </div>
                 </div>
+                <div class="ssr" id="numpadSettingRow"><span class="ssl">🔢 <span data-i="numpadSetting">Numpad</span></span><button class="btn bs" id="numpadToggleBtn" onclick="toggleNumpadSetting()" style="padding:6px 14px;font-size:13px"></button></div>
                 <div class="ssr"><span class="ssl" data-i="language">Jezik</span><button class="btn bs" onclick="toggleLang()" style="padding:6px 14px;font-size:13px" id="langSet">HR</button></div>
                 <div class="ssr"><span class="ssl">👤 <span data-i="editName">Ime / Avatar</span></span><button class="btn bs" onclick="editName()" style="padding:6px 14px;font-size:13px">✏️</button></div>
             </div>
@@ -615,22 +617,22 @@
                 <div id="resTxt"></div>
                 <div class="res-calc" id="resC"></div>
             </div>
-            <!-- numpad: ± 0 ⌫ / 7 8 9 / 4 5 6 / 1 2 3 / 💡 ✓ -->
+            <!-- numpad: phone layout 1-2-3 / 4-5-6 / 7-8-9 / ± 0 ⌫ / 💡 ↵ -->
             <div class="numpad" id="numpad">
-                <button class="nk nk-neg" onclick="npNeg()">±</button>
-                <button class="nk" onclick="npDigit(0)">0</button>
-                <button class="nk nk-back" onclick="npBack()">⌫</button>
-                <button class="nk" onclick="npDigit(7)">7</button>
-                <button class="nk" onclick="npDigit(8)">8</button>
-                <button class="nk" onclick="npDigit(9)">9</button>
-                <button class="nk" onclick="npDigit(4)">4</button>
-                <button class="nk" onclick="npDigit(5)">5</button>
-                <button class="nk" onclick="npDigit(6)">6</button>
                 <button class="nk" onclick="npDigit(1)">1</button>
                 <button class="nk" onclick="npDigit(2)">2</button>
                 <button class="nk" onclick="npDigit(3)">3</button>
+                <button class="nk" onclick="npDigit(4)">4</button>
+                <button class="nk" onclick="npDigit(5)">5</button>
+                <button class="nk" onclick="npDigit(6)">6</button>
+                <button class="nk" onclick="npDigit(7)">7</button>
+                <button class="nk" onclick="npDigit(8)">8</button>
+                <button class="nk" onclick="npDigit(9)">9</button>
+                <button class="nk nk-neg" onclick="npNeg()">±</button>
+                <button class="nk" onclick="npDigit(0)">0</button>
+                <button class="nk nk-back" onclick="npBack()">⌫</button>
                 <button class="nk nk-hint" onclick="showCalc()">💡</button>
-                <button class="nk nk-submit" id="nkSubmit" onclick="check()">✓</button>
+                <button class="nk nk-submit" id="nkSubmit" onclick="check()">↵</button>
             </div>
             <div id="contBar" style="display:none;padding:0 16px calc(var(--safe-bot) + 10px)">
                 <button class="nk nk-cont" onclick="cont()" title="Dalje (Enter)">▶</button>
@@ -712,8 +714,8 @@ function encExp(d){return btoa(unescape(encodeURIComponent(xorEnc(JSON.stringify
 function decImp(e){const j=xorEnc(decodeURIComponent(escape(atob(e))),EXPORT_KEY);const p=JSON.parse(j);if(!p.d||p.v!==2||p.cs!==cksum(p.d))throw 0;return p.d}
 
 const TR={
-    hr:{play:'Igraj',stats:'Stats',badges:'Trofeji',numbers:'br',speed:'Brzina',tasks:'zad',start:'Započni',practice:'Vježba',games:'Igara',correct:'Točno',accuracy:'Preciznost',bestStreak:'Niz',levels:'Razina',avgTime:'Pros. vr.',activity:'Aktivnost',weeks:'tj.',less:'Manje',more:'Više',worldAcc:'Preciznost po Svijetu',accChart:'Preciznost',theme:'Tema',language:'Jezik',check:'Provjeri',levelUp:'Nova Razina!',daily:'Dnevni Izazov',adaptive:'Prilagodljivi',time:'Vrijeme',perfect:'Savršeno',excellent:'Odlično!',good:'Dobro!',tryAgain:'Pokušaj ponovo',pressEnter:'Enter ↵',level:'Razina',confirmReset:'Obrisati sve podatke?',skip:'Preskoči',badges_earned:'Trofeji!',editName:'Ime / Avatar',challenge:'Izazov',challMode:'Način Izazova',challDesc:'Postavi parametre i mjeri vrijeme!',challStart:'Kreni!',challRounds:'Zadataka',challSpeed:'Brzina',challNums:'Znamenki',challOps:'Operacije',challPB:'Osobni rekord',challNewPB:'Novi rekord! 🎉',challResult:'Rezultat',challBack:'Natrag',go:'KRENI!',invalidFile:'Neispravna datoteka!',dataTitle:'Podaci',difficulty:'Težina',diff_beginner:'Početnik',diff_student:'Učenik',diff_normal:'Normalno',diff_competition:'Natjecanje',diff_elite:'Elita',exportBtn:'Spremi',importBtn:'Učitaj',retry:'Ponovi',worlds:'Svjetovi',config:'Postavke',levelsLabel:'Razine',world:'Svijet',soundTheme:'Zvukovi'},
-    en:{play:'Play',stats:'Stats',badges:'Badges',numbers:'num',speed:'Speed',tasks:'tasks',start:'Start',practice:'Practice',games:'Games',correct:'Correct',accuracy:'Accuracy',bestStreak:'Streak',levels:'Levels',avgTime:'Avg Time',activity:'Activity',weeks:'wk',less:'Less',more:'More',worldAcc:'World Accuracy',accChart:'Accuracy',theme:'Theme',language:'Language',check:'Check',levelUp:'Level Up!',daily:'Daily Challenge',adaptive:'Adaptive',time:'Time',perfect:'Perfect!',excellent:'Excellent!',good:'Good!',tryAgain:'Try Again',pressEnter:'Enter ↵',level:'Level',confirmReset:'Delete all data?',skip:'Skip',badges_earned:'Badges!',editName:'Name / Avatar',challenge:'Challenge',challMode:'Challenge Mode',challDesc:'Set parameters and race the clock!',challStart:'Start!',challRounds:'Tasks',challSpeed:'Speed',challNums:'Digits',challOps:'Operations',challPB:'Personal best',challNewPB:'New record! 🎉',challResult:'Result',challBack:'Back',go:'GO!',invalidFile:'Invalid file!',dataTitle:'Data',difficulty:'Difficulty',diff_beginner:'Beginner',diff_student:'Student',diff_normal:'Normal',diff_competition:'Competition',diff_elite:'Elite',exportBtn:'Export',importBtn:'Import',retry:'Retry',worlds:'Worlds',config:'Config',levelsLabel:'Levels',world:'World',soundTheme:'Sounds'}
+    hr:{play:'Igraj',stats:'Stats',badges:'Trofeji',numbers:'br',speed:'Brzina',tasks:'zad',start:'Započni',practice:'Vježba',games:'Igara',correct:'Točno',accuracy:'Preciznost',bestStreak:'Niz',levels:'Razina',avgTime:'Pros. vr.',activity:'Aktivnost',weeks:'tj.',less:'Manje',more:'Više',worldAcc:'Preciznost po Svijetu',accChart:'Preciznost',theme:'Tema',language:'Jezik',check:'Provjeri',levelUp:'Nova Razina!',daily:'Dnevni Izazov',adaptive:'Prilagodljivi',time:'Vrijeme',perfect:'Savršeno',excellent:'Odlično!',good:'Dobro!',tryAgain:'Pokušaj ponovo',pressEnter:'Enter ↵',level:'Razina',confirmReset:'Obrisati sve podatke?',skip:'Preskoči',badges_earned:'Trofeji!',editName:'Ime / Avatar',challenge:'Izazov',challMode:'Način Izazova',challDesc:'Postavi parametre i mjeri vrijeme!',challStart:'Kreni!',challRounds:'Zadataka',challSpeed:'Brzina',challNums:'Znamenki',challOps:'Operacije',challPB:'Osobni rekord',challNewPB:'Novi rekord! 🎉',challResult:'Rezultat',challBack:'Natrag',go:'KRENI!',invalidFile:'Neispravna datoteka!',dataTitle:'Podaci',difficulty:'Težina',diff_beginner:'Početnik',diff_student:'Učenik',diff_normal:'Normalno',diff_competition:'Natjecanje',diff_elite:'Elita',exportBtn:'Spremi',importBtn:'Učitaj',retry:'Ponovi',worlds:'Svjetovi',config:'Postavke',levelsLabel:'Razine',world:'Svijet',soundTheme:'Zvukovi',numpadSetting:'Numpad'},
+    en:{play:'Play',stats:'Stats',badges:'Badges',numbers:'num',speed:'Speed',tasks:'tasks',start:'Start',practice:'Practice',games:'Games',correct:'Correct',accuracy:'Accuracy',bestStreak:'Streak',levels:'Levels',avgTime:'Avg Time',activity:'Activity',weeks:'wk',less:'Less',more:'More',worldAcc:'World Accuracy',accChart:'Accuracy',theme:'Theme',language:'Language',check:'Check',levelUp:'Level Up!',daily:'Daily Challenge',adaptive:'Adaptive',time:'Time',perfect:'Perfect!',excellent:'Excellent!',good:'Good!',tryAgain:'Try Again',pressEnter:'Enter ↵',level:'Level',confirmReset:'Delete all data?',skip:'Skip',badges_earned:'Badges!',editName:'Name / Avatar',challenge:'Challenge',challMode:'Challenge Mode',challDesc:'Set parameters and race the clock!',challStart:'Start!',challRounds:'Tasks',challSpeed:'Speed',challNums:'Digits',challOps:'Operations',challPB:'Personal best',challNewPB:'New record! 🎉',challResult:'Result',challBack:'Back',go:'GO!',invalidFile:'Invalid file!',dataTitle:'Data',difficulty:'Difficulty',diff_beginner:'Beginner',diff_student:'Student',diff_normal:'Normal',diff_competition:'Competition',diff_elite:'Elite',exportBtn:'Export',importBtn:'Import',retry:'Retry',worlds:'Worlds',config:'Config',levelsLabel:'Levels',world:'World',soundTheme:'Sounds',numpadSetting:'Numpad'}
 };
 function t(k){return(TR[lang]&&TR[lang][k])||k}
 
@@ -725,7 +727,7 @@ function isRankUp(o,n){return getRank(o)!==getRank(n)}
 const TIPS={hr:['Vizualiziraj abakus u glavi!','Vježbaj svaki dan — čak i 5 min!','Kad dodaješ 6: dodaj 10, oduzmi 4.','Kad dodaješ 7: dodaj 10, oduzmi 3.','Greške pokazuju što vježbati!','Fokus je ključ!','Spora točnost > brza netočnost.','Kombiniraj metode!','Svaki prvak je bio početnik!','Zamišljaj brojeve kao slike.','Kad dodaješ 8: dodaj 10, oduzmi 2.','Kad dodaješ 9: dodaj 10, oduzmi 1.','Duboko udahni prije teških zadataka.','Pratite svoj napredak u statistikama!','Svakodnevni niz gradi naviku.','Ponovi isti razinu za mastery bodove.','Tiho okruženje poboljšava fokus.','Zatvori oči i zamisli abakus.','Ne gledaj u prste — računaj u glavi!','Kombinirani razini su najtežiji — pripremi se!','Dijamantski mastery zahtijeva 100% i brzinu.','Postavljanje osobnog rekorda daje bonus XP!','Prvih 5 brojeva su najkritičniji.','Odmori između sesija — mozak konsolidira znanje.','Nagradi se nakon teških razina!'],en:['Visualize an abacus in your mind!','Practice daily — even 5 min!','Adding 6: add 10, subtract 4.','Adding 7: add 10, subtract 3.','Mistakes show what to practice!','Focus is key!','Slow accuracy > fast inaccuracy.','Combine techniques!','Every champion was a beginner!','Visualize numbers as images.','Adding 8: add 10, subtract 2.','Adding 9: add 10, subtract 1.','Take a deep breath before tough rounds.','Check your progress in the stats tab!','A daily streak builds lasting habits.','Replay levels to earn mastery badges.','A quiet environment sharpens focus.','Close your eyes and picture the abacus.','Don\'t count on fingers — compute mentally!','Mixed levels are the hardest — stay sharp!','Diamond mastery requires 100% AND speed.','Setting a personal best earns bonus XP!','The first 5 numbers are the most critical.','Rest between sessions — your brain consolidates!','Reward yourself after a tough session!']};
 function renderTip(){const i=Math.floor(Date.now()/86400000)%TIPS.hr.length;const lbl=document.getElementById('tipLabel');if(lbl)lbl.textContent=lang==='hr'?'Savjet':'Tip';const txt=document.getElementById('tipText');if(txt)txt.textContent=TIPS[lang][i]}
 function renderRankCard(){const r=getRank(D.level),nx=RANKS.find(rr=>rr.minLvl>D.level);document.getElementById('rankIcon').textContent=r.icon;document.getElementById('rankTitleTxt').textContent=lang==='hr'?r.hr:r.en;document.getElementById('rankSubTxt').textContent=`Lv. ${D.level}`;document.getElementById('rankNextTxt').textContent=nx?`${nx.icon} ${nx.minLvl-D.level}`:'🏆 Max!'}
-function updLang(){document.querySelectorAll('[data-i]').forEach(e=>{const k=e.dataset.i;if(TR[lang][k])e.textContent=TR[lang][k]});document.getElementById('lb').textContent=lang==='hr'?'EN':'HR';document.getElementById('langSet').textContent=lang.toUpperCase();if(typeof setDifficulty==='function')setDifficulty(D.difficulty||'normal');}
+function updLang(){document.querySelectorAll('[data-i]').forEach(e=>{const k=e.dataset.i;if(TR[lang][k])e.textContent=TR[lang][k]});document.getElementById('lb').textContent=lang==='hr'?'EN':'HR';document.getElementById('langSet').textContent=lang.toUpperCase();if(typeof setDifficulty==='function')setDifficulty(D.difficulty||'normal');updNumpadBtn();}
 function pickLang(l){
     lang=l;
     localStorage.setItem('az_lang',l);
@@ -749,19 +751,6 @@ const BADGES=[{id:'star_collector',n:'⭐',d:{hr:'Savršena!',en:'Perfect!'},xp:
 // Simple progress badge IDs mapped to their data source
 const PROG_MAP={s3:['bestStreak',3],s5:['bestStreak',5],s10:['bestStreak',10],s20:['bestStreak',20],s50:['bestStreak',50],l3:['levelsCompleted',3],l5:['levelsCompleted',5],l10:['levelsCompleted',10],l25:['levelsCompleted',25],l50:['levelsCompleted',50],l100:['levelsCompleted',100],l150:['levelsCompleted',150],p1:['perfectLevels',1],p5:['perfectLevels',5],p10:['perfectLevels',10],p25:['perfectLevels',25],r50:['totalRounds',50],r100:['totalRounds',100],r500:['totalRounds',500],d3:['dailyStreak',3],d7:['dailyStreak',7],d14:['dailyStreak',14],d30:['dailyStreak',30]};
 
-// Difficulty presets — multipliers applied to base level config at game start
-// Each preset: { label_hr, label_en, icon, speedMult, extraNums, maxMult, xpMult }
-// speedMult < 1 = faster (e.g. 0.7 = 30% faster)
-// extraNums added on top of base digit count
-// maxMult multiplies maxNum/maxResult
-// xpMult adjusts XP earned (harder = more XP)
-// Difficulty presets — inspired by real soroban competition standards:
-// Beginner: absolute newcomer, very forgiving
-// Student:  active learner building habits
-// Normal:   current balanced default
-// Competition: All-Japan Soroban Championship level (~250-900ms, more numbers)
-// Elite:    Guinness World Record territory (~100-450ms, 15 nums, 3-digit)
-// Difficulty descriptions for config tab
 const DIFF_DESC = {
     beginner:    {hr:'Sporo za potpune početnike. Manje brojeva, lakše vrijednosti.',
                   en:'Slow pace for complete beginners. Fewer numbers, easier values.'},
@@ -826,7 +815,7 @@ function npDigit(d){if(G.waiting)return;const s=npCurrent.startsWith('-')?npCurr
 function npBack(){if(G.waiting)return;npCurrent=npCurrent.slice(0,-1);renderNP()}
 function npNeg(){if(G.waiting)return;if(npCurrent.startsWith('-'))npCurrent=npCurrent.slice(1);else if(npCurrent!=='')npCurrent='-'+npCurrent;else npCurrent='-';renderNP()}
 
-function init(){loadD();loadS();updLang();setDifficulty(D.difficulty||'normal');if(!D.nameSet)showNameEntry();else if(!D.tutorialDone)showTutorial();renderAll();setupKB();checkDaily();if(D.levelsCompleted>=100)document.getElementById('adaptiveCard').style.display='block'}
+function init(){loadD();loadS();updLang();setDifficulty(D.difficulty||'normal');initNumpadSetting();if(!D.nameSet)showNameEntry();else if(!D.tutorialDone)showTutorial();renderAll();setupKB();checkDaily();if(D.levelsCompleted>=100)document.getElementById('adaptiveCard').style.display='block'}
 function loadD(){const s=localStorage.getItem('az2');if(s)try{const saved=JSON.parse(s);D={...D,...saved};D.daily={...{date:null,goal:3,progress:0,done:false},...(saved.daily||{})};D.adaptiveLevel={...D.adaptiveLevel,...(saved.adaptiveLevel||{})}}catch(e){};// Migrate old difficulty names from anzan32
 const _diffMigrate={easy:'beginner',hard:'competition',expert:'elite'};
 if(_diffMigrate[D.difficulty])D.difficulty=_diffMigrate[D.difficulty];
@@ -834,7 +823,7 @@ if(!DIFFICULTIES[D.difficulty])D.difficulty='normal';}
 function saveD(){localStorage.setItem('az2',JSON.stringify(D))}
 function loadS(){lang=localStorage.getItem('az_lang')||'en';setTheme(localStorage.getItem('az_t')||'default');vol=parseFloat(localStorage.getItem('az_v')||'.7');document.getElementById('vol').value=vol*100}
 
-function showTutorial(){const steps=[{icon:'🧮',text:{hr:'Dobrodošli! Brojevi se brzo prikazuju.',en:'Welcome! Numbers flash quickly.'}},{icon:'🧠',text:{hr:'Zbrajaj u glavi. Minus (−) se oduzima.',en:'Add in your head. Minus (−) subtracts.'}},{icon:'✏️',text:{hr:'Upiši rezultat! Enter ili ✓.',en:'Type the answer! Enter or ✓.'}},{icon:'⭐',text:{hr:'🥉60% 🥈80% 🥇100% 💎100%+brzo',en:'🥉60% 🥈80% 🥇100% 💎100%+fast'}}];let step=0;function render(){const s=steps[step];document.getElementById('tutContent').innerHTML=`<div class="tut-step"><div class="tut-anim">${s.icon}</div><div class="tut-text">${s.text[lang].replace(/\n/g,'<br>')}</div><div class="tut-dots">${steps.map((_,i)=>`<div class="tut-dot ${i===step?'on':''}"></div>`).join('')}</div><div style="display:flex;gap:8px;justify-content:center">${step>0?'<button class="btn bs" onclick="tutPrev()">←</button>':''}${step<steps.length-1?'<button class="btn bp" onclick="tutNext()">→</button>':`<button class="btn bp" onclick="tutDone()">${t('start')}!</button>`}</div>${step===0?`<button class="btn bs" onclick="tutDone()" style="margin-top:8px;opacity:.6">${t('skip')}</button>`:''}</div>`}window.tutNext=()=>{step++;render()};window.tutPrev=()=>{step--;render()};window.tutDone=()=>{D.tutorialDone=true;saveD();closeM('mTut');renderTip()};render();document.getElementById('mTut').classList.add('vis')}
+function showTutorial(){const steps=[{icon:'🧮',text:{hr:'Dobrodošli! Brojevi se brzo prikazuju.',en:'Welcome! Numbers flash quickly.'}},{icon:'🧠',text:{hr:'Zbrajaj u glavi. Minus (−) se oduzima.',en:'Add in your head. Minus (−) subtracts.'}},{icon:'✏️',text:{hr:'Upiši rezultat! Enter ili ↵.',en:'Type the answer! Enter or ↵.'}},{icon:'⭐',text:{hr:'🥉60% 🥈80% 🥇100% 💎100%+brzo',en:'🥉60% 🥈80% 🥇100% 💎100%+fast'}}];let step=0;function render(){const s=steps[step];document.getElementById('tutContent').innerHTML=`<div class="tut-step"><div class="tut-anim">${s.icon}</div><div class="tut-text">${s.text[lang].replace(/\n/g,'<br>')}</div><div class="tut-dots">${steps.map((_,i)=>`<div class="tut-dot ${i===step?'on':''}"></div>`).join('')}</div><div style="display:flex;gap:8px;justify-content:center">${step>0?'<button class="btn bs" onclick="tutPrev()">←</button>':''}${step<steps.length-1?'<button class="btn bp" onclick="tutNext()">→</button>':`<button class="btn bp" onclick="tutDone()">${t('start')}!</button>`}</div>${step===0?`<button class="btn bs" onclick="tutDone()" style="margin-top:8px;opacity:.6">${t('skip')}</button>`:''}</div>`}window.tutNext=()=>{step++;render()};window.tutPrev=()=>{step--;render()};window.tutDone=()=>{D.tutorialDone=true;saveD();closeM('mTut');renderTip()};render();document.getElementById('mTut').classList.add('vis')}
 
 function todayStr(){return new Date().toISOString().split('T')[0]}
 function checkDaily(){const td=todayStr();if(D.daily.date!==td){D.daily={date:td,goal:3+Math.floor(D.level/10),progress:0,done:false};saveD()}updDaily()}
@@ -869,11 +858,9 @@ function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function renderWorlds(){
     const wd=levels.filter(l=>l.level%10===1);
     const total=wd.length;
-    // Update old wrlds (hidden, but other code may call it) - skip if not present
     const wrldEl=document.getElementById('wrlds');
-    if(wrldEl)wrldEl.innerHTML=''; // now unused
+    if(wrldEl)wrldEl.innerHTML='';
 
-    // Carousel
     const wData=wd[curWorld-1];
     if(!wData)return;
     const at=ANZAN_TYPES.find(a=>a.id===wData.anzanType);
@@ -902,17 +889,14 @@ function renderWorlds(){
     if(fracEl)fracEl.textContent=cmp+'/10';
     if(leftBtn)leftBtn.disabled=(curWorld<=1);
     if(rightBtn){
-        // Can go right if next world exists and is unlocked
         const nextW=curWorld+1;
         const nextUnlocked=nextW<=total&&(nextW===1||D.levelProgress[(nextW-1)*10]?.completed);
         rightBtn.disabled=!nextUnlocked;
     }
-    // Dots
     if(dotsEl){
         const maxDots=Math.min(total,15);
         dotsEl.innerHTML=[...Array(maxDots)].map((_,i)=>`<div class="wc-dot${i+1===curWorld?' on':''}"></div>`).join('');
     }
-    // Update wrldProg if visible
     let completed=0;
     wd.forEach(l=>{
         const w=l.world;
@@ -929,7 +913,6 @@ function wNav(dir){
     const ul=next===1||D.levelProgress[(next-1)*10]?.completed;
     if(!ul)return;
     curWorld=next;selectedLevel=null;
-    // Animate out/in
     const wc=document.getElementById('wcMain');
     if(wc){
         wc.style.transition='opacity .12s,transform .12s';
@@ -951,7 +934,6 @@ function wNav(dir){
     }
 }
 function selW(w){curWorld=w;selectedLevel=null;renderWorlds();renderLevels();closeSheet();
-    // Scroll world card into view
     setTimeout(()=>{
         const on=document.querySelector('.wb.on');
         if(on)on.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
@@ -1040,7 +1022,6 @@ function challSet(k,v){
     if(k==='rounds')CH.rounds=v;
     if(k==='numbers'){
         CH.numbers=v;
-        // Auto-suggest max based on digit count (can be overridden manually after)
         const autoMax=v<=3?9:v<=5?50:v<=8?99:200;
         CH.maxNum=autoMax;
     }
@@ -1050,22 +1031,18 @@ function challSet(k,v){
     playS('tick');
 }
 function syncChallUI(){
-    // Update display elements
     const spd=(CH.speed/1000).toFixed(1)+'s';
     const rd=document.getElementById('cv-rounds-d');if(rd)rd.textContent=CH.rounds;
     const nd=document.getElementById('cv-numbers-d');if(nd)nd.textContent=CH.numbers;
     const sd=document.getElementById('cv-speed-d');if(sd)sd.textContent=spd;
     const sl=document.getElementById('speedSlider');if(sl)sl.value=CH.speed;
-    // Update hidden compat spans
     const cr=document.getElementById('cv-rounds');if(cr)cr.textContent=CH.rounds;
     const cn=document.getElementById('cv-numbers');if(cn)cn.textContent=CH.numbers;
     const cs=document.getElementById('cv-speed');if(cs)cs.textContent=spd;
     const cm=document.getElementById('cv-maxNum');if(cm)cm.textContent=CH.maxNum;
-    // Highlight max chips
     document.querySelectorAll('[data-k="maxNum"]').forEach(b=>{
         b.classList.toggle('on',parseInt(b.dataset.v)===CH.maxNum);
     });
-    // Show current maxNum value (may not match a chip if custom)
     const ml=document.getElementById('cv-maxNum-live');
     if(ml){
         const chipMatch=[9,20,50,99,200,999].includes(CH.maxNum);
@@ -1076,10 +1053,8 @@ function challToggleOp(op){const i=CH.ops.indexOf(op);if(i>=0){if(CH.ops.length<
 function challConfigHash(){return`${CH.rounds}-${CH.numbers}-${CH.speed}-${CH.maxNum}-${CH.ops.slice().sort().join('')}`}
 function updChallPB(){syncChallUI();
     const h=challConfigHash(),pb=D.challengePBs?.[h];
-    // Hidden placeholder card (for JS compat)
     const c=document.getElementById('challPBCard');
     if(c){if(pb){c.style.display='flex';const pt=document.getElementById('challPBTime');const pa=document.getElementById('challPBAcc');if(pt)pt.textContent=pb.time.toFixed(2)+'s';if(pa)pa.textContent=pb.acc+'%'}else{c.style.display='none'}}
-    // Inline compact PB display
     const t2=document.getElementById('challPBTime2');
     const ti=document.getElementById('challPBInline');
     if(pb){if(t2)t2.textContent=pb.time.toFixed(2)+'s';if(ti)ti.textContent=`🏅 ${pb.acc}%`}
@@ -1144,7 +1119,6 @@ function finishChallenge(){
     checkBadges({perfect:acc===100,challTime:elapsed,isNewPB,dailyLevels:D.dailyGames[dk]||0});saveD();
     restoreUI();G.isChallenge=false;G.challPending=false;G.waiting=false;
     tab('challenge');
-    // Set panel state AFTER tab() since tab() calls challBack() which resets panels
     document.getElementById('challSetupPanel').style.display='none';document.getElementById('challResultPanel').style.display='block';
     const te=document.getElementById('challResultTitle');
     if(isNewPB&&acc===100)te.textContent=`💯+${t('challNewPB')}`;else if(isNewPB)te.textContent=`🥇 ${t('challNewPB')}`;else if(acc===100)te.textContent=`💯 ${t('perfect')}`;else te.textContent=`⏱️ ${t('challResult')}`;
@@ -1172,7 +1146,6 @@ function restoreUI(){exitGameScreen()}
 function startGame(practice=false){if(!G.level)return;initAudio();G.round=0;G.results=[];G.correct=0;G.streak=0;G.maxStreak=0;G.combo=0;G.maxCombo=0;G.hintUsed=false;G.waiting=false;G.finishing=false;G.startTime=Date.now();G.roundTimes=[];G.isPractice=practice;G.isAdaptive=false;G.isChallenge=false;G.challPending=false;G.levelComplete=false;enterGameScreen();document.getElementById('challSwInGame').classList.remove('on');document.getElementById('gln').textContent=`${t('level')} ${G.level.level}`;const at=ANZAN_TYPES.find(a=>a.id===G.level.anzanType);document.getElementById('anzanType').textContent=at?(lang==='hr'?at.hr:at.en):'';document.getElementById('combo').classList.remove('vis');document.getElementById('gscore').textContent='';document.getElementById('pracBadge').style.display=practice?'inline-block':'none';
     if(!G.isAdaptive&&!G.isChallenge)G.level=applyDifficulty(G.level);
     drawDots(G.level.rounds,G.results,G.round);
-    // Show difficulty badge in game header
     const dif=DIFFICULTIES[D.difficulty]||DIFFICULTIES.normal;
     const db=document.getElementById('diffBadge');
     if(db){db.textContent=dif.icon;db.title=lang==='hr'?dif.hr:dif.en;db.style.display=(!G.isAdaptive&&!G.isChallenge)?'inline-block':'none';}
@@ -1191,7 +1164,6 @@ function pickRoundType(lv){
 
 function genNums(){
     let rt=pickRoundType(G.level);
-    // mixed/master: randomly pick an operation type
     if(rt==='mixed'||rt==='master'){const ops=['addition','subtraction','multiplication','division'];rt=ops[rnd(0,ops.length-1)]}
     if(rt==='multiplication'){const r=genMult(G.level.minNum,G.level.maxNum);G.dispNums=r.dispNums;G.isNeg=r.isNeg;G.answer=r.answer;G.opType=r.opType;return}
     if(rt==='division'){const r=genDiv(G.level.minNum,G.level.maxNum);G.dispNums=r.dispNums;G.isNeg=r.isNeg;G.answer=r.answer;G.opType=r.opType;return}
@@ -1220,7 +1192,7 @@ function masteryIcon(m){return{diamond:'💎',gold:'🥇',silver:'🥈',bronze:'
 function masteryName(m){return({hr:{diamond:'Dijamant',gold:'Zlato',silver:'Srebro',bronze:'Bronca'},en:{diamond:'Diamond',gold:'Gold',silver:'Silver',bronze:'Bronze'}}[lang]||{})[m]||''}
 
 function finish(){
-    if(G.levelComplete)return; // Guard against double-call
+    if(G.levelComplete)return;
     G.levelComplete=true;G.finishing=false;
     const acc=Math.round(G.correct/G.level.rounds*100),time=Math.floor((Date.now()-G.startTime)/1000),avgRT=G.roundTimes.length>0?G.roundTimes.reduce((a,b)=>a+b,0)/G.roundTimes.length:0;
     let stars=0;if(acc>=60)stars=1;if(acc>=80)stars=2;if(acc===100)stars=3;
@@ -1246,25 +1218,20 @@ function showComplete(acc,stars,xp,time,mastery){
     document.getElementById('gs').classList.remove('on');
     document.getElementById('cs').classList.add('on');
     document.getElementById('combo').classList.remove('vis');
-    // Title
     const ct=document.getElementById('csTitle');
     if(acc===100)ct.textContent=`🌟 ${t('perfect')}`;
     else if(acc>=80)ct.textContent=`🎉 ${t('excellent')}`;
     else if(acc>=60)ct.textContent=`👍 ${t('good')}`;
     else ct.textContent=`💪 ${t('tryAgain')}`;
-    // Badge
     const cb=document.getElementById('csBadge');
     if(acc===100)cb.textContent='🏆';else if(acc>=80)cb.textContent='🎖️';else if(acc>=60)cb.textContent='✅';else cb.textContent='🔁';
-    // Mastery
     const cm=document.getElementById('csMastery');
     cm.textContent=mastery?`${masteryIcon(mastery)} ${masteryName(mastery)}`:'';
-    // Stars
     [1,2,3].forEach((i,idx)=>{
         const el=document.getElementById(`csStar${i}`);
         if(i<=stars){el.textContent='⭐';el.style.opacity='1';el.style.animation=`pu .4s ${idx*.15}s both`}
         else{el.textContent='☆';el.style.opacity='.25';el.style.animation=''}
     });
-    // Stats
     document.getElementById('cC').textContent=`${G.correct}/${G.level.rounds}`;
     document.getElementById('cA').textContent=`${acc}%`;
     document.getElementById('cS').textContent=G.maxStreak;
@@ -1272,7 +1239,6 @@ function showComplete(acc,stars,xp,time,mastery){
     const di=DIFFICULTIES[D.difficulty]||DIFFICULTIES.normal;
     const dTag=(!G.isPractice&&D.difficulty!=='normal')?` (${di.icon})`:'';
     document.getElementById('cX').textContent=G.isPractice?'—':`+${xp} ⭐${dTag}`;
-    // Next button - show only if passed and more levels exist
     const nxt=document.getElementById('nxtBtn');
     nxt.style.display=(acc>=60&&(G.level.level<150||G.isAdaptive))?'flex':'none';
     if(acc===100){celebrate();playS('win')}else if(acc>=60)playS('done');
@@ -1301,10 +1267,8 @@ function showNameEntry(){
     document.getElementById('namePromptTxt').textContent=D.nameSet?(lang==='hr'?'Promijeni ime i avatar':'Change name & avatar'):(lang==='hr'?'Upiši svoje ime!':'Enter your name!');
     document.getElementById('nameStartBtn').textContent=D.nameSet?(lang==='hr'?'Spremi':'Save'):(lang==='hr'?'Kreni!':'Go!');
     document.getElementById('nameInput').placeholder=lang==='hr'?'Tvoje ime...':'Your name...';
-    // Show lang picker only on first run; hide when editing existing profile
     const lpr=document.getElementById('langPickRow');
     if(lpr)lpr.style.display=D.nameSet?'none':'flex';
-    // Sync lang picker buttons to current lang
     const lpEn=document.getElementById('lpEn');
     const lpHr=document.getElementById('lpHr');
     if(lpEn)lpEn.classList.toggle('on',lang==='en');
@@ -1327,13 +1291,41 @@ function resetData(){if(confirm(t('confirmReset'))){localStorage.removeItem('az2
 
 function setTheme(th){if(th==='default')document.body.removeAttribute('data-theme');else document.body.setAttribute('data-theme',th);document.querySelectorAll('.thb').forEach(b=>b.classList.toggle('on',b.dataset.theme===th));localStorage.setItem('az_t',th)}
 function setVol(v){vol=v/100;localStorage.setItem('az_v',vol)}
+
+// Numpad visibility — only relevant on non-touch (PC) devices
+const isTouchDevice=()=>('ontouchstart' in window)||navigator.maxTouchPoints>0;
+let showNumpad=true; // default: show on touch, hide on PC
+function initNumpadSetting(){
+    const isTouch=isTouchDevice();
+    const row=document.getElementById('numpadSettingRow');
+    // Only show the setting row on PC (non-touch)
+    if(row)row.style.display=isTouch?'none':'flex';
+    // Load saved preference; on touch always show, on PC default to hidden
+    const saved=localStorage.getItem('az_numpad');
+    showNumpad=saved!==null?saved==='1':(isTouch?true:false);
+    updNumpadBtn();
+}
+function updNumpadBtn(){
+    const btn=document.getElementById('numpadToggleBtn');
+    if(btn)btn.textContent=showNumpad?(lang==='hr'?'Prikazan':'Visible'):(lang==='hr'?'Skriven':'Hidden');
+}
+function toggleNumpadSetting(){
+    showNumpad=!showNumpad;
+    localStorage.setItem('az_numpad',showNumpad?'1':'0');
+    updNumpadBtn();
+    // Apply immediately if answer area is open
+    const aa=document.getElementById('aa');
+    if(aa.classList.contains('on')&&!document.getElementById('contBar').style.display.includes('block')){
+        document.getElementById('numpad').style.display=showNumpad?'grid':'none';
+    }
+}
 function closeM(id){document.getElementById(id).classList.remove('vis')}
 
 function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)()}
 function playS(type,v=5){
     if(!vol||!audioCtx)return;
     const th=SOUND_THEMES[soundTheme];
-    if(!th)return; // 'off'
+    if(!th)return;
     try{
         const now=audioCtx.currentTime,vl=vol*th.gain;
         const bf=th.baseFreq;
@@ -1398,7 +1390,7 @@ function exitGameScreen(){
     document.getElementById('gscore').style.display='';
 }
 function hideAnswerArea(){document.getElementById('aa').classList.remove('on');document.getElementById('numpad').style.display='grid';document.getElementById('contBar').style.display='none';clearNP()}
-function showAnswerArea(){clearNP();document.getElementById('resTxt').textContent='';document.getElementById('resC').innerHTML='';document.getElementById('aa').classList.add('on');document.getElementById('numpad').style.display='grid';document.getElementById('contBar').style.display='none'}
+function showAnswerArea(){clearNP();document.getElementById('resTxt').textContent='';document.getElementById('resC').innerHTML='';document.getElementById('nd').textContent='';document.getElementById('nc').textContent='';document.getElementById('aa').classList.add('on');document.getElementById('numpad').style.display=showNumpad?'grid':'none';document.getElementById('contBar').style.display='none'}
 function showContinueBar(){document.getElementById('numpad').style.display='none';document.getElementById('contBar').style.display='block'}
 let _i=false;function safeInit(){if(_i)return;_i=true;initSheetSwipe();init()}
 document.addEventListener('DOMContentLoaded',safeInit);if(document.readyState!=='loading')safeInit();
